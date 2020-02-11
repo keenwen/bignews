@@ -54,5 +54,37 @@
 
         </div>
     </div>
+
+    <script>
+        $(function () {
+            $.ajax({
+                type: 'get',
+                // 把token令牌带过去
+                // headers:{
+                //     'Authorization':localStorage.getItem('token')
+                // },
+                url: 'http://localhost:8080/api/v1/admin/user/info',
+                success: function (backData) {
+                    console.log(backData);
+                    //显示个人信息
+
+
+                }
+            })
+
+
+            // 原生方式发送
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('get', 'http://localhost:8080/api/v1/admin/user/info')
+            // xhr.setRequestHeader('Authorization', localStorage.getItem('token'))
+            // xhr.onload = function (backDaa) {
+            //     console.log(xhr.response);
+
+
+            // }
+            // xhr.send()
+        })
+    </script>
 </body>
+
 </html>
