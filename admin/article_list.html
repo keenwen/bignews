@@ -142,18 +142,20 @@
                             $('tbody').html(resHtml);
                             // 做额外事情
                             // 如果有数据
-                            if (backData.data.data.length != 0 && callback != null) {
+                            if (backData.data.totalPage != 0 && callback != null) {
                                 // 有数据
                                 $('#pagination').show();
                                 $('#pagination').next().hide();
                                 callback(backData);
                                 // 没数据
-                            } else if (backData.data.totalPage == myPage - 1 && backData.data.data
-                                .length == 0) {
-                                myPage -= 1;
-                                $('#pagination').twbsPagination('changeTotalPages', backData.data
-                                    .totalPage, myPage);
-                            } else if (backData.data.data.length == 0) {
+                            } 
+                            // else if (backData.data.totalPage == myPage - 1 && backData.data.data
+                            //     .length == 0) {
+                            //     myPage -= 1;
+                            //     $('#pagination').twbsPagination('changeTotalPages', backData.data
+                            //         .totalPage, myPage);
+                            // } 
+                            else if (backData.data.totalPage == 0) {
                                 $('#pagination').hide();
                                 $('#pagination').next().show();
 
@@ -208,17 +210,17 @@
                             if (backData.code == 204) {
                                 getData(myPage, function (backData) {
                                     // 重新生成分页结构
-                                    $('#pagination').twbsPagination(
-                                        'changeTotalPages', backData.data
-                                        .totalPage, myPage);
+                                    // $('#pagination').twbsPagination(
+                                    //     'changeTotalPages', backData.data
+                                    //     .totalPage, myPage);
 
 
-                                    // if (backData.data.totalPage == myPage||myPage==1) {
-                                    //     $('#pagination').twbsPagination('changeTotalPages', backData.data.totalPage, myPage);
+                                    if (backData.data.totalPage == myPage||myPage==1) {
+                                        $('#pagination').twbsPagination('changeTotalPages', backData.data.totalPage, myPage);
 
-                                    // } else {
-                                    //     $('#pagination').twbsPagination('changeTotalPages', backData.data.totalPage, myPage - 1);
-                                    // }
+                                    } else {
+                                        $('#pagination').twbsPagination('changeTotalPages', backData.data.totalPage, myPage - 1);
+                                    }
                                 });
 
                             }
