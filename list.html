@@ -153,13 +153,13 @@
             <div class="common_wrap">
                 <h3><i class="fa fa-bar-chart"></i> 一周热门排行</h3>
                 <ul class="content_list">
-                    <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
-                    <li><span class="second">2</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><span class="third">3</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><span>4</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><span>5</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><span>6</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+                    <li><span class="first">1</span><a href="#"></a></li>
+                    <li><span class="second">2</span><a href="#"></a></li>
+                    <li><span class="third">3</span><a href="#"></a></li>
+                    <li><span>4</span><a href="#"></a></li>
+                    <li><span>5</span><a href="#"></a></li>
+                    <li><span>6</span><a href="#"></a></li>
+                    <li><span>7</span><a href="#"></a></li>
                 </ul>
             </div>
             <div class="common_wrap">
@@ -200,13 +200,13 @@
             <div class="common_wrap">
                 <h3><i class="fa fa-bullseye"></i> 焦点关注</h3>
                 <ul class="content_list guanzhu_list">
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
                 </ul>
             </div>
         </div>
@@ -227,6 +227,180 @@
     </div>
     <!-- 导包template -->
     <script src="./js/template-web.js"></script>
+    <!-- list页面模板 -->
+    <script id="list_temp" type="text/html">
+        <div class="list_title">
+            <h3></h3>
+        </div>
+        {{each data.data v}}
+        <div class="common_news_list">
+            <a href="./article.html?id={{v.id}}" class="list_pic"><img src="{{v.cover}}" alt=""></a>
+            <h4><a href="./article.html?id={{v.id}}">{{v.title}}</a></h4>
+            <p>{{@ v.intro}}
+            </p>
+            <div class="new_info">
+                <span>标签：{{v.category}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;阅读(
+                    {{v.read}}
+                    )&nbsp;&nbsp;&nbsp;<i class="fa fa-commenting"></i>&nbsp;评论( {{v.comments}} )</span>
+                <b>发布于 {{v.date}}</b>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+ <!-- 最新评论模板 -->
+ <script id="latestcomment_temp" type="text/html">
+    {{each data v}}
+    <li>
+        <span>{{v.author.slice(0,1)}}</span>
+        <b><em>{{v.author}}</em> {{v.date}}说:</b>
+        <strong>{{v.intro}}</strong>
+    </li>
+    {{/each}}
+</script>
+<!-- 焦点关注 -->
+<script id="attention_temp" type="text/html">
+    {{each data v}}
+    <li><a href="./article.html?id={{v.id}}">{{v.intro}}</a></li>
+    {{/each}}
+</script>
+<!-- 所有分类 -->
+<script id="category_temp" type="text/html">
+    <li class="up"></li>
+    {{each data v}}
+    <li><a href="./list.html?id={{v.id}}">{{v.name}}</a></li>
+    {{/each}}
+</script>
+<!-- 六2:所有的文章类别模板2 -->
+<script id="category_temp2" type="text/html">
+    {{each data v}}
+    <li><a href="./list.html?id={{v.id}}">{{v.name}}</a></li>
+    {{/each}}
+</script>
+
+
+    <script>
+        // 入口函数
+        $(function () {
+            //判断如何进入list页面
+            var value1 = window.location.search.split('=')[0];
+            var value2 = window.location.search.split('=')[1];
+            if (value1 == '') {
+                //说明是输入list.html地址进来的
+                window.location.href = './index.html';
+            } else if (value1 == '?id') {
+                // 这里是点击文章类别进来的
+                $.ajax({
+                    url: 'http://localhost:8080/api/v1/index/search',
+                    data: {
+                        type: value2,
+                    },
+                    success: backData => {
+                        if (backData.data.data.length > 0) {
+                            var resHtml = template('list_temp', backData);
+                            $('div.left_con.setfr').html(
+                                `<div class="list_temp"><h3>${backData.data.data[0].category}</h3></div>` +
+                                resHtml);
+                        } else {
+                            $('div.left_con.setfr').html('<div class="list_temp"><h3>没有数据</h3></div>');
+                            return;
+                        }
+                    }
+                });
+            } else {
+                // 点击搜索按钮过来的
+                value2 = decodeURI(value2); //通过url传过来的搜索关键词解码
+                $.ajax({
+                    url: 'http://localhost:8080/api/v1/index/search',
+                    data: {
+                        key: value2,
+                    },
+                    success: backData => {
+                        var resHtml=template('list_temp',backData);
+                        $('div.left_con.setfr')
+                            .html(`<div class="list_title"><h3>${value2}</h3></div>${ resHtml}`);
+                    }
+                });
+            }
+// ------------------------------------------------------------
+
+              // 热门排行
+
+              $.ajax({
+                url: 'http://localhost:8080/api/v1/index/rank',
+                success: backData => {
+
+                    if (backData.code == 200) {
+                        //遍历数据
+                        //找到数据要渲染的标签,分别渲染上. 
+                        for (var i = 0; i < backData.data.length; i++) {
+                            $('.content_list>li').eq(i).children('a').text(backData.data[i].title);
+                            $('.content_list>li').eq(i).children('a').attr('href',
+                                './article.html?id=' + backData.data[i].id);
+                        }
+                    }
+                }
+            });
+            //最新评论
+
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/index/latest_comment',
+                success: backData => {
+                    // var month = new Date().getMonth() + 1; //当前的月份
+                    // backData.month = month; //添加到backData数据中
+
+                    var resHtml = template('latestcomment_temp', backData);
+                    $('.comment_list').html(resHtml);
+                }
+            });
+            // 焦点关注
+
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/index/attention',
+                success: backData => {
+
+                    if (backData.code == 200) {
+                        var resHtml = template('attention_temp', backData);
+                        $('.guanzhu_list').html(resHtml);
+                    }
+                }
+            });
+            // 所有分类
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/index/category',
+                success: backData => {
+
+                    if (backData.code == 200) {
+                        var resHtml = template('category_temp', backData);
+                        $('.level_two').html(resHtml);;
+                        //七.获取所有的文章类型2
+                        var resHtml2 = template('category_temp2', backData);
+                        $('.left_menu.fl').html(resHtml2);
+                    }
+                }
+            });
+            // 搜索文章
+            $('.search_btn').on('click', () => {
+                var searchTxt = $('.search_txt').val().trim();
+                if (searchTxt == "") {
+                    alert("搜索不能为空!");
+                    return;
+                } else if (isNaN(parseInt(searchTxt)) == false) {
+                    alert('搜索关键字为文本内容');
+                    return;
+                } else {
+                    window.location.href = "./list.html?searchTxt=" + searchTxt;
+
+                }
+            });
+            //文本输入框设置键盘按下事件:回车
+            $('.search_txt').on('keydown', e => {
+                if (e.keyCode == 13) {
+                    $('.search_btn').click();
+                }
+            });
+
+        });
+    </script>
 </body>
 
 </html>
