@@ -44,38 +44,38 @@
         </div>
     </div>
 
-    <div class="container-fluid">
-        <div class="row curve-pie">
-            <div class="col-lg-8 col-md-8">
-                <div class="gragh_pannel" id="curve_show"></div>
-            </div>
-            <div class="col-lg-4 col-md-4">
-                <div class="gragh_pannel" id="pie_show"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid">
-        <div class="column_pannel" id="column_show"></div>
-    </div>
-
-
+   <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+   <div id="main" style="width: 760px;height:370px;"></div>
+   <div id="main2" style="width: 760px;height:370px;"></div>
+   <div id="main3" style="width: 760px;height:370px;"></div>
     <!-- 折线图 -->
     <script>
-        var json = '{"code":200,"msg":"获取成功","date":[{"date":"2019-05-20","count":23},{"date":"2019-05-21","count":19},{"date":"2019-05-22","count":29},{"date":"2019-05-23","count":24},{"date":"2019-05-24","count":28},{"date":"2019-05-25","count":28},{"date":"2019-05-26","count":19},{"date":"2019-05-27","count":25},{"date":"2019-05-28","count":25}]}';
-        var obj = JSON.parse(json);
-        loadEchars(obj);
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8080/api/v1/admin/data/article',
+            //后台所有的接口访问都要token. 
+            headers: {
+                'Authorization': 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiYWRtaW4iLCJleHAiOjIxODY4MjY0NjgsImlhdCI6MTU4MjAyNjQ2OH0.gy3iWeUniCrgH4ODXCJMkpgmmMjveD9-aHDnE951WLUj2h8edWHCm5G3WEIoluUO0VxKim4FsFT2ZnBV4A0F6Af2I4rvR7-OlHyNqy64B8JTNnMPpHa8XNOQsebEeCt7Vylu2espTIrcAxmcqEeJQE5GP5yZsecJhzH_jmglF8k'
+            },
+            success: function (backData) {
+               loadEchars(backData);
+            }
+        });
+        
 
         function loadEchars(obj) {
             // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('curve_show'));
+            var myChart = echarts.init(document.getElementById('main'));
 
             var data = [];
             var date = [];
             for (var i = 0; i < obj.date.length; i++) {
                 data.push(obj.date[i].count);
                 date.push(obj.date[i].date);
+
             }
+            console.log(obj);
+            
 
             option = {
                 tooltip: {
@@ -151,7 +151,7 @@
     <!-- 环形图 -->
     <script>
         // 基于准备好的dom，初始化echarts实例
-        var myChart1 = echarts.init(document.getElementById('pie_show'));
+        var myChart1 = echarts.init(document.getElementById('main2'));
 
         option1 = {
             title: {
@@ -200,7 +200,7 @@
     <!-- 柱状图 -->
     <script>
         // 基于准备好的dom，初始化echarts实例
-        var myChart2 = echarts.init(document.getElementById('column_show'));
+        var myChart2 = echarts.init(document.getElementById('main3'));
 
         option2 = {
             title: {
